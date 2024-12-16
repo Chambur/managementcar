@@ -18,6 +18,8 @@ public class Coche {
     private String modelo;
     
     private String color;
+
+    private boolean reservado=false;
     
     @Enumerated(EnumType.STRING)
     private NivelGasolina nivelGasolina;

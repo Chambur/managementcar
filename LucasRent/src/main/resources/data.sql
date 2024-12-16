@@ -1,8 +1,11 @@
-INSERT INTO coches (matricula, modelo, color, nivel_gasolina) VALUES 
-('1234ABC', 'Toyota Corolla', '#808080', 'LLENO'),      -- Gris
-('5678DEF', 'Honda Civic', '#FF0000', 'MEDIO'),        -- Rojo
-('9012GHI', 'Ford Focus', '#0000FF', 'CUARTO'),        -- Azul
-('3456JKL', 'Volkswagen Golf', '#FFFFFF', 'TRES_CUARTOS'); -- Blanco
+INSERT INTO coches (matricula, modelo, color, reservado, nivel_gasolina) VALUES 
+('1234ABC', 'Toyota Corolla', '#808080', true,  'LLENO'),      -- Gris
+('5678DEF', 'Honda Civic', '#FF0000', false, 'MEDIO'),        -- Rojo
+('9012GHI', 'Ford Focus', '#0000FF', true, 'CUARTO'),        -- Azul
+('3456JKL', 'Volkswagen Golf', '#FFFFFF', false, 'TRES_CUARTOS'); -- Blanco
+
+INSERT INTO hotels (name, addres) VALUES
+('Hotel 1 de prueba', 'Direccion 1 de pruebas');
 
 -- También podemos añadir algunos usuarios de ejemplo
 INSERT INTO usuarios (username, password, rol) VALUES
