@@ -2,10 +2,7 @@ package com.lucas.fuel.LucasRent.service;
 
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.stereotype.Service;
-
 import com.lucas.fuel.LucasRent.model.Hoteles;
 import com.lucas.fuel.LucasRent.repository.HotelsRepository;
 

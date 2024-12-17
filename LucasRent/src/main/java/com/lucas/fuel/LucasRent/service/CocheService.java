@@ -1,14 +1,19 @@
 package com.lucas.fuel.LucasRent.service;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lucas.fuel.LucasRent.model.Coche;
 import com.lucas.fuel.LucasRent.repository.CocheRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="coche_id")
+
 public class CocheService {
 
     private final CocheRepository cocheRepository;
@@ -37,4 +42,10 @@ public class CocheService {
     public void eliminarCoche(Long id) {
         cocheRepository.deleteById(id);
     }
+
+    public Coche findById(Long id) {
+        return cocheRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Coche no encontrado con ID: " + id));
+    }
+
 } 
