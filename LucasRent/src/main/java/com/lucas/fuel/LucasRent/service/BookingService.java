@@ -22,10 +22,10 @@ public class BookingService {
     }
 
     public Booking newBooking(Booking booking) {
-        if (booking.getCoche() != null && booking.getCoche().getId() != null) {
-            Coche cocheExistente = cocheRepository.findById(booking.getCoche().getId())
+        if (booking.getCocheID() != null && booking.getCocheID() != null) {
+            Coche cocheExistente = cocheRepository.findById(booking.getCocheID())
                 .orElseThrow(() -> new RuntimeException("Coche no encontrado"));
-            booking.setCoche(cocheExistente);
+            booking.setCocheID(cocheExistente.getId());
             cocheExistente.setReservado(true);
         }
         return bookingRepository.save(booking);

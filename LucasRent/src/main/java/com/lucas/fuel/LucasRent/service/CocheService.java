@@ -1,7 +1,5 @@
 package com.lucas.fuel.LucasRent.service;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lucas.fuel.LucasRent.model.Coche;
 import com.lucas.fuel.LucasRent.repository.CocheRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="coche_id")
 
 public class CocheService {
 

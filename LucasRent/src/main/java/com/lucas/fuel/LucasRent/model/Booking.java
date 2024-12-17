@@ -2,10 +2,7 @@ package com.lucas.fuel.LucasRent.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,14 +28,7 @@ public class Booking implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate fechaFin;
 
-    @ManyToOne
-    @JoinColumn(name = "coche_id" /* , nullable = false*/)
-    //@JsonManagedReference
-    private Coche coche;
-
-    public void setCoche(Coche coche) {
-        this.coche = coche;
-    }
+    private Long cocheID;
     
 }
 

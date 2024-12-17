@@ -6,9 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Entity
@@ -31,7 +29,7 @@ public class Coche implements Serializable{
     @Enumerated(EnumType.STRING)
     private NivelGasolina nivelGasolina;
 
-    @OneToMany(mappedBy = "coche")
+    //@OneToMany(mappedBy = "coche")
     //@JsonBackReference
     @JsonIgnore
     private List<Booking> bookings;

@@ -1,12 +1,10 @@
 package com.lucas.fuel.LucasRent.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lucas.fuel.LucasRent.model.Booking;
-import com.lucas.fuel.LucasRent.repository.CocheRepository;
-import com.lucas.fuel.LucasRent.service.CocheService;
-
+import lombok.Data;
 import java.time.LocalDate;
 
+@Data
 public class BookingDTO {
 
     private Long id;
@@ -29,50 +27,6 @@ public class BookingDTO {
         this.cocheId = cocheId;
     }
 
-    // Constructor vacío
-    public BookingDTO() {}
-
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public LocalDate getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(LocalDate fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public Long getCocheId() {
-        return cocheId;
-    }
-
-    public void setCocheId(Long cocheId) {
-        this.cocheId = cocheId;
-    }
-
     // Método auxiliar para convertir de DTO a entidad Booking
     public Booking toEntity(Coche coche) {
         Booking booking = new Booking();
@@ -80,7 +34,7 @@ public class BookingDTO {
         booking.setRoomNumber(this.roomNumber);
         booking.setFechaInicio(this.fechaInicio);
         booking.setFechaFin(this.fechaFin);
-        booking.setCoche(coche);
+        //booking.setCoche(coche);
         return booking;
     }
     

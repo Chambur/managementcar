@@ -6,12 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.lucas.fuel.LucasRent.model.Booking;
 import com.lucas.fuel.LucasRent.model.BookingDTO;
-import com.lucas.fuel.LucasRent.model.Coche;
 import com.lucas.fuel.LucasRent.service.BookingService;
-import com.lucas.fuel.LucasRent.service.CocheService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class BookingController {
 
     private final BookingService bookingService;
-    private final CocheService cocheService;
+   
 
     // Método GET: Devuelve una lista de BookingDTO
     @GetMapping
@@ -33,7 +30,7 @@ public class BookingController {
                         booking.getRoomNumber(),
                         booking.getFechaInicio(),
                         booking.getFechaFin(),
-                        booking.getCoche().getId()
+                        booking.getCocheID()
                 ))
                 .collect(Collectors.toList());
 
@@ -45,11 +42,11 @@ public class BookingController {
     public ResponseEntity<Booking> createNewBooking(@RequestBody BookingDTO bookingDTO) {
         try {
             // Buscar coche utilizando el servicio
-            Coche coche = cocheService.findById(bookingDTO.getCocheId());
+            //Coche coche = cocheService.findById(bookingDTO.getCocheId());
             
             // Crear la entidad Booking
             Booking booking = new Booking();
-            booking.setCoche(coche);
+            booking.setCocheID(bookingDTO.getCocheId());
             booking.setFechaInicio(bookingDTO.getFechaInicio());
             booking.setFechaFin(bookingDTO.getFechaFin());
             booking.setRoomNumber(bookingDTO.getRoomNumber());
@@ -66,16 +63,13 @@ public class BookingController {
     @PutMapping("/{id}")
     public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long id, @RequestBody BookingDTO bookingDTO) {
         try {
-            // Buscar coche utilizando el servicio
-            Coche coche = cocheService.findById(bookingDTO.getCocheId());
-
             // Convertir el DTO a entidad
             Booking booking = new Booking();
             booking.setId(id);
             booking.setRoomNumber(bookingDTO.getRoomNumber());
             booking.setFechaInicio(bookingDTO.getFechaInicio());
             booking.setFechaFin(bookingDTO.getFechaFin());
-            booking.setCoche(coche);
+            booking.setCocheID(bookingDTO.getCocheId());
 
             // Actualizar la reserva
             Booking updatedBooking = bookingService.updateBooking(id, booking);
@@ -86,7 +80,7 @@ public class BookingController {
                     updatedBooking.getRoomNumber(),
                     updatedBooking.getFechaInicio(),
                     updatedBooking.getFechaFin(),
-                    updatedBooking.getCoche().getId()
+                    updatedBooking.getCocheID()
             );
 
             return ResponseEntity.ok(updatedBookingDTO);
