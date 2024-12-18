@@ -19,7 +19,7 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final CocheService cocheService;
-
+    //Reupdated
     // Método GET: Devuelve una lista de Booking
     @GetMapping
     public ResponseEntity<List<Booking>> obtainAllBookings() {
