@@ -4,11 +4,11 @@ INSERT INTO coches (matricula, modelo, color, reservado, nivel_gasolina) VALUES
 ('9012GHI', 'Ford Focus', '#0000FF', true, 'CUARTO'),        -- Azul
 ('3456JKL', 'Volkswagen Golf', '#FFFFFF', false, 'TRES_CUARTOS'); -- Blanco
 
-INSERT INTO hotels (name, addres) VALUES
-('Hotel 1 de prueba', 'Direccion 1 de pruebas');
+INSERT INTO hotels (name, addres, hotelphone) VALUES
+('Hotel 1 de prueba', 'Direccion 1 de pruebas', 928570766);
 
-INSERT INTO booking (room_number, fecha_inicio, fecha_fin, cocheID) VALUES 
-(101, '2023-10-01', '2023-10-05', 1); -- Asegúrate de que el coche con ID 1 exista
+INSERT INTO booking (room_number, fecha_inicio, fecha_fin, cocheID, hotelname) VALUES 
+(101, '2023-10-01', '2023-10-05', 1, 'Dunas Maspalomas'); -- Asegúrate de que el coche con ID 1 exista
 
 -- También podemos añadir algunos usuarios de ejemplo
 INSERT INTO usuarios (username, password, rol) VALUES

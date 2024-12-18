@@ -35,6 +35,7 @@ public class HotelsService {
         }else{
             hotelesExistente.setName(hoteles.getName());
             hotelesExistente.setAddres(hoteles.getAddres());
+            hotelesExistente.setHotelphone((hoteles.getHotelphone()));
             return hotelsRepository.save(hotelesExistente);
         }
         

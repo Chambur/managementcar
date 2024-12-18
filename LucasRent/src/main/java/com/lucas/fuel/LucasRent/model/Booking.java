@@ -18,7 +18,7 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    //@Column(unique = true)
     private Integer roomNumber;
 
     // Serializa las fechas en el formato "día/mes/año"
@@ -29,6 +29,6 @@ public class Booking implements Serializable {
     private LocalDate fechaFin;
 
     private Long cocheID;
-    
+    private String hotelname;    
 }
 

@@ -40,7 +40,7 @@ public class BookingService {
         return bookingRepository.save(existBooking);
     }
 
-    public void deteleBooking(Long id) {
+    public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
     }
 }

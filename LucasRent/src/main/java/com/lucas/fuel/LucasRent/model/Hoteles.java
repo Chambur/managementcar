@@ -16,5 +16,7 @@ public class Hoteles {
 
     @Column(unique = true)
     private String name;
-    private String addres;    
+    private String addres;
+    private int hotelphone;
+    
 }
