@@ -30,7 +30,7 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
         </Typography>
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'left' }}>
           <Button onClick={() => navigate('/cars')} color="inherit">Gasolina</Button>
-          <Button onClick={() => navigate('/reservas')} color="inherit">Reservas</Button>
+          <Button onClick={() => navigate('/BookingList')} color="inherit">Reservas</Button>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton 

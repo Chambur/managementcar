@@ -8,7 +8,7 @@ import Login from './components/Login';
 import CarList from './components/CarList';
 import CarForm from './components/CarForm';
 import Navbar from './components/Navbar';
-import Reservas from './components/Reservas';
+import BookingList from './components/BookingList';
 import BannerImage from './images/banner2.jpg';
 
 function App() {
@@ -85,8 +85,8 @@ function App() {
             element={<Navigate to="/cars" />} 
           />
           <Route
-            path="/reservas"
-            element={isAuthenticated ? <Reservas /> : <Navigate to="/login" />}
+            path="/BookingList"
+            element={isAuthenticated ? <BookingList /> : <Navigate to="/login" />}
             />
         </Routes>
       </BrowserRouter>
