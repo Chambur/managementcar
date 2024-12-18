@@ -10,6 +10,7 @@ import com.lucas.fuel.LucasRent.service.BookingService;
 import com.lucas.fuel.LucasRent.service.CocheService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/booking")
@@ -25,6 +26,13 @@ public class BookingController {
         List<Booking> bookings = bookingService.obteinallBookings();
         return ResponseEntity.ok(bookings);
     }
+    //Endpoint para rescatar las reservas de HOY 
+    @GetMapping("/today")
+    public ResponseEntity<List<Booking>> getBookingForToday(){
+        List<Booking> bookings = bookingService.findBookingsForToday();
+        return ResponseEntity.ok(bookings);
+    }
+    
 
     // Método POST: Crea una nueva reserva
     @PostMapping

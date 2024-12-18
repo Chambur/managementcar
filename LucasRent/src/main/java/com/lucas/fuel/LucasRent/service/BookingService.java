@@ -1,5 +1,6 @@
 package com.lucas.fuel.LucasRent.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.lucas.fuel.LucasRent.model.Booking;
@@ -26,7 +27,7 @@ public class BookingService {
             Coche cocheExistente = cocheRepository.findById(booking.getCocheID())
                 .orElseThrow(() -> new RuntimeException("Coche no encontrado"));
             booking.setCocheID(cocheExistente.getId());
-            cocheExistente.setReservado(true);
+            //cocheExistente.setReservado(true);
         }
         return bookingRepository.save(booking);
     }
@@ -42,5 +43,11 @@ public class BookingService {
 
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    public List<Booking> findBookingsForToday(){
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0);
+        LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59);
+        return bookingRepository.findByFechaInicioBetween(startOfDay, endOfDay);
     }
 }
