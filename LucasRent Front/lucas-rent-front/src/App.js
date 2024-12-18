@@ -8,6 +8,8 @@ import Login from './components/Login';
 import CarList from './components/CarList';
 import CarForm from './components/CarForm';
 import Navbar from './components/Navbar';
+import Reservas from './components/Reservas';
+import BannerImage from './images/banner2.jpg';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -25,6 +27,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
+      <img 
+        src={BannerImage} 
+        alt="Banner" 
+        style={{ width: '100%', height: '150px', objectFit: 'cover' }} // Ajustar altura y mantener proporciones
+      /> 
         {isAuthenticated && (
           <Navbar 
             darkMode={darkMode} 
@@ -77,6 +84,10 @@ function App() {
             path="/" 
             element={<Navigate to="/cars" />} 
           />
+          <Route
+            path="/reservas"
+            element={isAuthenticated ? <Reservas /> : <Navigate to="/login" />}
+            />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

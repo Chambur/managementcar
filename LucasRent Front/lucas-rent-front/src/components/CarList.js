@@ -20,7 +20,9 @@ import {
   Edit as EditIcon, 
   Delete as DeleteIcon,
   Add as AddIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Lock as LockIcon,
+  Check as CheckIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getCars, deleteCar } from '../services/api';
@@ -168,6 +170,7 @@ function CarList() {
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: 'primary.main' }}>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Reservado</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Matrícula</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Modelo</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Color</TableCell>
@@ -179,8 +182,15 @@ function CarList() {
             {filteredCars.map((car) => (
               <TableRow 
                 key={car.id}
-                sx={{ '&:hover': { backgroundColor: 'action.hover' } }}
+                sx={{ 
+                  '&:hover': { backgroundColor: 'action.hover' },
+                  backgroundColor: 'transparent',
+                  color: 'black'
+                }}
               >
+                <TableCell>
+                  {car.reservado ? <LockIcon color="error" /> : <CheckIcon color="success" />}
+                </TableCell>
                 <TableCell>
                   <Typography sx={{ 
                     fontWeight: 500, 
@@ -253,7 +263,7 @@ function CarList() {
             ))}
             {filteredCars.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
                   <Typography variant="body1" color="text.secondary">
                     No se encontraron coches con esa matrícula
                   </Typography>

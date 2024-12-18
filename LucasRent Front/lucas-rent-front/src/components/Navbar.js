@@ -3,7 +3,8 @@ import {
   Toolbar, 
   Typography, 
   IconButton, 
-  Box 
+  Box, 
+  Button 
 } from '@mui/material';
 import { 
   Brightness4 as DarkIcon,
@@ -23,11 +24,15 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Gestión de Coches
+          Gestión
         </Typography>
-        <Box>
+        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'left' }}>
+          <Button onClick={() => navigate('/cars')} color="inherit">Gasolina</Button>
+          <Button onClick={() => navigate('/reservas')} color="inherit">Reservas</Button>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton 
             color="inherit" 
             onClick={() => setDarkMode(!darkMode)}
@@ -38,7 +43,7 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
             color="inherit"
             onClick={handleLogout}
           >
-            <LogoutIcon />
+          <LogoutIcon />
           </IconButton>
         </Box>
       </Toolbar>
