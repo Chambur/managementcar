@@ -1,6 +1,9 @@
 package com.lucas.fuel.LucasRent.controller;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +13,6 @@ import com.lucas.fuel.LucasRent.service.BookingService;
 import com.lucas.fuel.LucasRent.service.CocheService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/booking")
@@ -19,6 +21,8 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final CocheService cocheService;
+    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
+
     //Reupdated
     // Método GET: Devuelve una lista de Booking
     @GetMapping
@@ -38,6 +42,9 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Booking> createNewBooking(@RequestBody Booking booking) {
         try {
+            // Mostrar los datos recibidos en la consola usando logger
+            logger.info("Datos recibidos: {}", booking);
+
             // Validamos que el coche existe
             if (cocheService.findById(booking.getCocheID()) == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Coche no encontrado
@@ -47,7 +54,7 @@ public class BookingController {
             Booking createdBooking = bookingService.newBooking(booking);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al crear la reserva: ", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
