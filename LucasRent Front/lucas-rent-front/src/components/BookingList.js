@@ -22,7 +22,7 @@ import {
 import { getBookings, deleteBooking } from '../services/api';
 import CrearReserva from './BookingForm'; // Importar el nuevo componente
 import { Search as SearchIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { parseISO } from 'date-fns'; // Asegúrate de importar parseISO
+import { format } from 'date-fns'; // Asegúrate de importar parseISO y format
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
@@ -82,6 +82,11 @@ function BookingList() {
     
     // Crear un nuevo objeto Date
     return new Date(year, month - 1, day, hours, minutes); // month - 1 porque los meses en JavaScript son 0-indexados
+  };
+
+  // Función para formatear la hora
+  const formatTime = (date) => {
+    return format(date, 'HH:mm'); // Formato de 24 horas
   };
 
   if (loading) {
@@ -165,8 +170,16 @@ function BookingList() {
               <TableRow key={booking.id} sx={{ '&:hover': { backgroundColor: 'action.hover' } }}>
                 <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.id}</TableCell>
                 <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.roomNumber}</TableCell>
-                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{parseCustomDate(booking.fechaInicio).toLocaleDateString('es-ES')} {parseCustomDate(booking.fechaInicio).toLocaleTimeString('es-ES')}</TableCell>
-                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{parseCustomDate(booking.fechaFin).toLocaleDateString('es-ES')} {parseCustomDate(booking.fechaFin).toLocaleTimeString('es-ES')}</TableCell>
+                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>
+                  {parseCustomDate(booking.fechaInicio).toLocaleDateString('es-ES')} 
+                  {' '}
+                  {formatTime(parseCustomDate(booking.fechaInicio))}
+                </TableCell>
+                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>
+                  {parseCustomDate(booking.fechaFin).toLocaleDateString('es-ES')} 
+                  {' '}
+                  {formatTime(parseCustomDate(booking.fechaFin))}
+                </TableCell>
                 <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.cocheID}</TableCell>
                 <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.hotelname}</TableCell>
                 <TableCell>

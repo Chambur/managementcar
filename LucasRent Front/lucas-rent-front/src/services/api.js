@@ -130,6 +130,7 @@ export const deleteCar = async (id) => {
 export const getBookings = async () => {
   const auth = localStorage.getItem('auth');
   try {
+    //console.log("Entrando al GET");
     const response = await fetch(`http://localhost:8080/api/booking`, {
       headers: {
         'Authorization': 'Basic ' + auth,
@@ -152,6 +153,9 @@ export const getBookings = async () => {
 export const createBooking = async (bookingData) => {
   const auth = localStorage.getItem('auth');
   try {
+    //console.log("Entrando al POST");
+    //console.log('Enviando datos de la reserva al backend:', JSON.stringify(bookingData, null, 2));
+
     const response = await fetch(`${API_URL}/api/booking`, {
       method: 'POST',
       headers: {
@@ -176,6 +180,8 @@ export const createBooking = async (bookingData) => {
 export const updateBooking = async (id, bookingData) => {
   const auth = localStorage.getItem('auth');
   try {
+    console.log('Actualizando reserva con datos:', JSON.stringify(bookingData, null, 2));
+
     const response = await fetch(`${API_URL}/api/booking/${id}`, {
       method: 'PUT',
       headers: {
