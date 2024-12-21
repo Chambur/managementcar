@@ -49,6 +49,11 @@ function BookingList() {
       setLoading(false);
     }
   };
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedBooking(null); // Limpiar la reserva seleccionada
+  };
+  
 
   const handleDeleteBooking = async (id) => {
     if (window.confirm('¿Está seguro de que desea eliminar esta reserva?')) {
@@ -149,13 +154,13 @@ function BookingList() {
         <DialogTitle>{selectedBooking ? 'Actualizar Reserva' : 'Crear Reserva'}</DialogTitle>
         <DialogContent>
           <CrearReserva 
-            onClose={() => setShowForm(false)} 
+            onClose={handleCloseForm}
             onReservaCreada={handleReservaCreada} 
             booking={selectedBooking} // Pasar la reserva seleccionada para actualizar
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowForm(false)}>Cancelar</Button>
+          <Button onClick={handleCloseForm}>Cancelar</Button>
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, overflow: 'hidden' }}>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
-import { createBooking } from '../services/api'; // Asegúrate de que la ruta sea correcta
+import { createBooking, updateBooking } from '../services/api'; // Importar la nueva función de actualización
 
 function BookingForm({ onClose, onReservaCreada, booking }) {
-  // Establecer valores por defecto
+  // Valores por defecto
   const today = new Date();
   const defaultRoomNumber = '103';
   const defaultFechaFin = new Date(today);
@@ -21,12 +21,12 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   useEffect(() => {
     if (booking) {
       setRoomNumber(booking.roomNumber);
-      setFechaInicio(booking.fechaInicio.slice(0, 16)); // Asegúrate de que esté en el formato correcto
-      setFechaFin(booking.fechaFin.slice(0, 16)); // Asegúrate de que esté en el formato correcto
+      setFechaInicio(booking.fechaInicio.slice(0, 16)); // Formato adecuado
+      setFechaFin(booking.fechaFin.slice(0, 16)); // Formato adecuado
       setCocheID(booking.cocheID);
       setHotelname(booking.hotelname);
     }
-  }, [booking]); // Solo se ejecuta cuando `booking` cambia
+  }, [booking]);
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -40,39 +40,31 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Estoy entrando a la reserva");
 
-    // Crear un objeto con los datos de la reserva
     const bookingData = {
-      roomNumber: parseInt(roomNumber, 10), // Convertir a entero
-      fechaInicio: formatDateTime(fechaInicio.replace('T', ' ')), // Formatear la fecha y hora
-      fechaFin: formatDateTime(fechaFin.replace('T', ' ')), // Formatear la fecha y hora
-      cocheID: parseInt(cocheID, 10), // Convertir a entero
+      roomNumber: parseInt(roomNumber, 10),
+      fechaInicio: formatDateTime(fechaInicio.replace('T', ' ')),
+      fechaFin: formatDateTime(fechaFin.replace('T', ' ')),
+      cocheID: parseInt(cocheID, 10),
       hotelname,
     };
 
-    // Mostrar el JSON en la consola (exactamente lo que se envía al backend)
-    console.log(JSON.stringify(bookingData, null, 2));
-
     try {
-      // Llamar a la API para crear la reserva
-      await createBooking(bookingData);
-      onReservaCreada(); // Notificar que se ha creado la reserva
+      if (booking) {
+        // Llamar a la función de actualización si se está editando una reserva
+        console.log("Actualizar reserva");
+        await updateBooking(booking.id, bookingData);
+      } else {
+        // Llamar a la función de creación si es una nueva reserva
+        console.log("CRear reserva");
+        await createBooking(bookingData);
+      }
+      onReservaCreada(); // Notificar que se ha creado/actualizado la reserva
       onClose(); // Cerrar el formulario
     } catch (error) {
-      console.error('Error al crear la reserva:', error);
-      setError('Error al crear la reserva.'); // Manejar el error
+      console.error('Error al procesar la reserva:', error);
+      setError('Error al procesar la reserva.');
     }
-  };
-
-  const handleFechaInicioChange = (e) => {
-    const value = e.target.value;
-    setFechaInicio(value); // Establecer el valor directamente
-  };
-
-  const handleFechaFinChange = (e) => {
-    const value = e.target.value;
-    setFechaFin(value); // Establecer el valor directamente
   };
 
   return (
@@ -89,7 +81,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
         label="Fecha Inicio"
         type="datetime-local"
         value={fechaInicio}
-        onChange={handleFechaInicioChange}
+        onChange={(e) => setFechaInicio(e.target.value)}
         fullWidth
         required
       />
@@ -97,7 +89,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
         label="Fecha Fin"
         type="datetime-local"
         value={fechaFin}
-        onChange={handleFechaFinChange}
+        onChange={(e) => setFechaFin(e.target.value)}
         fullWidth
         required
       />
@@ -125,4 +117,4 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   );
 }
 
-export default BookingForm; 
+export default BookingForm;
