@@ -160,7 +160,7 @@ function BookingList() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseForm}>Cancelar</Button>
+          {/* <Button onClick={handleCloseForm}>Cancelar</Button> */}
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, overflow: 'hidden' }}>
