@@ -38,6 +38,9 @@ public class BookingService {
             
         existBooking.setFechaInicio(booking.getFechaInicio());
         existBooking.setFechaFin(booking.getFechaFin());
+        existBooking.setCocheID(booking.getCocheID());
+        existBooking.setHotelname(booking.getHotelname());
+        existBooking.setRoomNumber(booking.getRoomNumber());
         return bookingRepository.save(existBooking);
     }
 
