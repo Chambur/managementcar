@@ -224,6 +224,104 @@ export const deleteBooking = async (id) => {
   }
 };
 
+
+export const getHotels = async () => {
+  const auth = localStorage.getItem('auth');
+  try {
+    //console.log("Entrando al GET");
+    const response = await fetch(`http://localhost:8080/api/hotels`, {
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener las reservas');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al obtener las reservas:', error);
+    throw error;
+  }
+};
+
+export const createHotel = async (hotelData) => {
+  const auth = localStorage.getItem('auth');
+  try {
+    //console.log("Entrando al POST");
+    //console.log('Enviando datos de la reserva al backend:', JSON.stringify(bookingData, null, 2));
+
+    const response = await fetch(`${API_URL}/api/hotels`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(hotelData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al crear la reserva');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al crear la reserva:', error);
+    throw error;
+  }
+};
+
+export const updateHotel = async (id, hotelData) => {
+  const auth = localStorage.getItem('auth');
+  try {
+    //console.log('Actualizando reserva con datos:', JSON.stringify(bookingData, null, 2));
+
+    const response = await fetch(`${API_URL}/api/hotels/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(hotelData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar la reserva');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al actualizar la reserva:', error);
+    throw error;
+  }
+};
+
+export const deleteHotel = async (id) => {
+  const auth = localStorage.getItem('auth');
+  try {
+    const response = await fetch(`${API_URL}/api/hotels/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al eliminar la reserva');
+    }
+  } catch (error) {
+    console.error('Error al eliminar la reserva:', error);
+    throw error;
+  }
+};
+
 api.interceptors.request.use((config) => {
   const auth = localStorage.getItem('auth');
   if (auth) {

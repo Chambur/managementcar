@@ -6,23 +6,27 @@ import {
   Typography,
   Container,
   Paper,
-  Alert
+  Alert,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
-import { createBooking, updateBooking } from '../services/api';
+import { createBooking, updateBooking, getCars } from '../services/api';
 
 function BookingForm({ onClose, onReservaCreada, booking }) {
   const today = new Date();
   const defaultRoomNumber = '103';
   const defaultFechaFin = new Date(today);
   defaultFechaFin.setDate(today.getDate() + 22 - today.getDate());
-  const defaultCocheID = '2';
   const defaultHotelname = 'Hotel de pruebas';
 
   const [roomNumber, setRoomNumber] = useState(defaultRoomNumber);
   const [fechaInicio, setFechaInicio] = useState(today.toISOString().slice(0, 16));
   const [fechaFin, setFechaFin] = useState(defaultFechaFin.toISOString().slice(0, 16));
-  const [cocheID, setCocheID] = useState(defaultCocheID);
   const [hotelname, setHotelname] = useState(defaultHotelname);
+  const [cocheID, setCocheID] = useState('');
+  const [cars, setCars] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,6 +37,19 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
       setCocheID(booking.cocheID);
       setHotelname(booking.hotelname);
     }
+
+    // Obtiene los coches disponibles
+    const fetchCars = async () => {
+      try {
+        const response = await getCars();
+        setCars(response);
+      } catch (err) {
+        console.error('Error al obtener los coches:', err);
+        setError('No se pudieron cargar los coches disponibles.');
+      }
+    };
+
+    fetchCars();
   }, [booking]);
 
   const formatDateTime = (dateString) => {
@@ -78,7 +95,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
           mb: 4,
           display: 'flex',
           flexDirection: 'column',
-          gap: 2
+          gap: 2,
         }}
       >
         <Paper
@@ -86,7 +103,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
           sx={{
             p: 4,
             borderRadius: 2,
-            backgroundColor: 'background.paper'
+            backgroundColor: 'background.paper',
           }}
         >
           <Typography
@@ -96,7 +113,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
             sx={{
               fontWeight: 'medium',
               color: 'primary.main',
-              mb: 3
+              mb: 3,
             }}
           >
             {booking ? 'Editar Reserva' : 'Nueva Reserva'}
@@ -107,7 +124,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               severity="error"
               sx={{
                 mb: 3,
-                borderRadius: 2
+                borderRadius: 2,
               }}
             >
               {error}
@@ -127,8 +144,8 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
+                  borderRadius: 2,
+                },
               }}
             />
 
@@ -141,8 +158,8 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
+                  borderRadius: 2,
+                },
               }}
             />
 
@@ -155,23 +172,26 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
+                  borderRadius: 2,
+                },
               }}
             />
 
-            <TextField
-              required
-              label="Coche ID"
-              value={cocheID}
-              onChange={(e) => setCocheID(e.target.value)}
-              fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
-              }}
-            />
+            <FormControl fullWidth>
+              <InputLabel id="cocheID-label">Coche</InputLabel>
+              <Select
+                labelId="cocheID-label"
+                value={cocheID}
+                onChange={(e) => setCocheID(e.target.value)}
+                fullWidth
+              >
+                {cars.map((car) => (
+                  <MenuItem key={car.id} value={car.id}>
+                    {`${car.matricula} - ${car.modelo}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <TextField
               required
@@ -181,8 +201,8 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               fullWidth
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  borderRadius: 2
-                }
+                  borderRadius: 2,
+                },
               }}
             />
 
@@ -194,22 +214,14 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
                 '& button': {
                   borderRadius: 2,
                   py: 1.5,
-                  textTransform: 'none'
-                }
+                  textTransform: 'none',
+                },
               }}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-              >
+              <Button type="submit" variant="contained" fullWidth>
                 {booking ? 'Actualizar Reserva' : 'Crear Reserva'}
               </Button>
-              <Button
-                variant="outlined"
-                fullWidth
-                onClick={onClose}
-              >
+              <Button variant="outlined" fullWidth onClick={onClose}>
                 Cancelar
               </Button>
             </Box>
