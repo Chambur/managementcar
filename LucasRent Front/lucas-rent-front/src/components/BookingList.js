@@ -62,7 +62,13 @@ function BookingList() {
   };
 
   const handleUpdateBooking = (booking) => {
-    setSelectedBooking(booking); // Establecer la reserva seleccionada
+    // Parsear las fechas al formato que puede leer date-fns
+    const updatedBooking = {
+      ...booking,
+      fechaInicio: format(parseCustomDate(booking.fechaInicio), 'yyyy-MM-dd\'T\'HH:mm'), // Formato adecuado
+      fechaFin: format(parseCustomDate(booking.fechaFin), 'yyyy-MM-dd\'T\'HH:mm') // Formato adecuado
+    };
+    setSelectedBooking(updatedBooking); // Establecer la reserva seleccionada
     setShowForm(true); // Mostrar el formulario
   };
 
