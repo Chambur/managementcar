@@ -32,6 +32,8 @@ public class CocheService {
         
         cocheExistente.setMatricula(coche.getMatricula());
         cocheExistente.setNivelGasolina(coche.getNivelGasolina());
+        cocheExistente.setModelo(coche.getModelo());
+        cocheExistente.setColor(coche.getColor());
         
         return cocheRepository.save(cocheExistente);
     }
