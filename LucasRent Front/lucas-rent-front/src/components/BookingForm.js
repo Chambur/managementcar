@@ -12,7 +12,7 @@ import {
   InputLabel,
   FormControl,
 } from '@mui/material';
-import { createBooking, updateBooking, getCars } from '../services/api';
+import { createBooking, updateBooking, getCars, getHotels } from '../services/api';
 
 function BookingForm({ onClose, onReservaCreada, booking }) {
   const today = new Date();
@@ -28,17 +28,11 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   const [cocheID, setCocheID] = useState('');
   const [cars, setCars] = useState([]);
   const [error, setError] = useState(null);
+  const [hotels, setHotels] = useState([]);
+
 
   useEffect(() => {
-    if (booking) {
-      setRoomNumber(booking.roomNumber);
-      setFechaInicio(booking.fechaInicio.slice(0, 16));
-      setFechaFin(booking.fechaFin.slice(0, 16));
-      setCocheID(booking.cocheID);
-      setHotelname(booking.hotelname);
-    }
-
-    // Obtiene los coches disponibles
+    // Función para obtener los coches
     const fetchCars = async () => {
       try {
         const response = await getCars();
@@ -48,9 +42,34 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
         setError('No se pudieron cargar los coches disponibles.');
       }
     };
-
+  
+    // Función para obtener los hoteles
+    const fetchHotels = async () => {
+      try {
+        const response = await getHotels();
+        setHotels(response);
+      } catch (err) {
+        console.error('Error al obtener los hoteles:', err);
+        setError('No se pudieron cargar los hoteles disponibles.');
+      }
+    };
+  
+    // Si existe una reserva, setea los valores del formulario
+    if (booking) {
+      setRoomNumber(booking.roomNumber);
+      setFechaInicio(booking.fechaInicio.slice(0, 16));
+      setFechaFin(booking.fechaFin.slice(0, 16));
+      setCocheID(booking.cocheID);
+      setHotelname(booking.hotelname);
+    }
+  
+    // Llamadas a las funciones para cargar coches y hoteles
     fetchCars();
+    fetchHotels();
   }, [booking]);
+  
+
+  
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -193,18 +212,22 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               </Select>
             </FormControl>
 
-            <TextField
-              required
-              label="Nombre del Hotel"
+            <FormControl fullWidth>
+            <InputLabel id="hotelname-label">Hotel</InputLabel>
+            <Select
+              labelId="hotelname-label"
               value={hotelname}
               onChange={(e) => setHotelname(e.target.value)}
               fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                },
-              }}
-            />
+            >
+              {hotels.map((hotel) => (
+                <MenuItem key={hotel.id} value={hotel.name}>
+                  {hotel.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
 
             <Box
               sx={{

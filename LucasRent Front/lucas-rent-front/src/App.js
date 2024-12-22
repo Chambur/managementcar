@@ -80,6 +80,7 @@ function App() {
               )
             } 
           />
+          
           <Route 
             path="/" 
             element={<Navigate to="/cars" />} 

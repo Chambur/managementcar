@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { getBookings, deleteBooking } from '../services/api';
 import CrearReserva from './BookingForm'; // Importar el nuevo componente
-import { Search as SearchIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Search as SearchIcon, Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, } from '@mui/icons-material';
 import { format } from 'date-fns'; // Asegúrate de importar parseISO y format
 
 function BookingList() {
@@ -110,14 +110,34 @@ function BookingList() {
 
   return (
     <Box sx={{ p: 3, maxWidth: 1200, margin: '0 auto' }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>Lista de Reservas</Typography>
-      <Button 
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        mb: 3,
+        backgroundColor: 'background.paper',
+        p: 2,
+        borderRadius: 1,
+        boxShadow: 1
+      }}>
+        <Typography variant="h4" sx={{ fontWeight: 'medium' }}>
+          Lista de Reservas
+        </Typography>
+        <Button 
+        startIcon={<AddIcon />}
         variant="contained" 
         onClick={() => setShowForm(true)} 
-        sx={{ float: 'right', mb: 2 }} // Botón a la derecha
+        sx={{ 
+          borderRadius: 2,
+          textTransform: 'none',
+          px: 3
+        }} // Botón a la derecha
       >
         Crear Reserva
       </Button>
+      </Box>
+      
+      
       <TextField
         fullWidth
         variant="outlined"

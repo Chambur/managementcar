@@ -1,11 +1,11 @@
 import { 
   AppBar, 
   Toolbar, 
-  Typography, 
   IconButton, 
   Box, 
   Button 
 } from '@mui/material';
+
 import { 
   Brightness4 as DarkIcon,
   Brightness7 as LightIcon,
@@ -24,30 +24,30 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
 
   return (
     <AppBar position="static">
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Gestión
-        </Typography>
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'left' }}>
-          <Button onClick={() => navigate('/cars')} color="inherit">Gasolina</Button>
-          <Button onClick={() => navigate('/BookingList')} color="inherit">Reservas</Button>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton 
-            color="inherit" 
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            {darkMode ? <LightIcon /> : <DarkIcon />}
-          </IconButton>
-          <IconButton 
-            color="inherit"
-            onClick={handleLogout}
-          >
-          <LogoutIcon />
-          </IconButton>
-        </Box>
-      </Toolbar>
-    </AppBar>
+      <Toolbar sx={{ justifyContent: 'center' }}>
+      {/* Contenedor central para los botones */}
+    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+      <Button onClick={() => navigate('/cars')} color="inherit">Gasolina</Button>
+      <Button onClick={() => navigate('/BookingList')} color="inherit">Reservas</Button>
+    </Box>
+
+    {/* Contenedor para los íconos (a la derecha) */}
+    <Box sx={{ position: 'absolute', right: 16, display: 'flex', alignItems: 'center' }}>
+      <IconButton 
+        color="inherit" 
+        onClick={() => setDarkMode(!darkMode)}
+      >
+        {darkMode ? <LightIcon /> : <DarkIcon />}
+      </IconButton>
+      <IconButton 
+        color="inherit"
+        onClick={handleLogout}
+      >
+        <LogoutIcon />
+      </IconButton>
+    </Box>
+  </Toolbar>
+</AppBar>
   );
 }
 
