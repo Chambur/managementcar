@@ -86,7 +86,7 @@ function App() {
             element={<Navigate to="/cars" />} 
           />
           <Route
-            path="/BookingList"
+            path="/bookings"
             element={isAuthenticated ? <BookingList /> : <Navigate to="/login" />}
             />
         </Routes>

@@ -23,6 +23,7 @@ import { getBookings, deleteBooking } from '../services/api';
 import CrearReserva from './BookingForm'; // Importar el nuevo componente
 import { Search as SearchIcon, Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, } from '@mui/icons-material';
 import { format } from 'date-fns'; // Asegúrate de importar parseISO y format
+import { getCars } from '../services/api';
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
@@ -31,10 +32,21 @@ function BookingList() {
   const [showForm, setShowForm] = useState(false); // Estado para mostrar el formulario
   const [selectedBooking, setSelectedBooking] = useState(null); // Estado para la reserva seleccionada
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+  const [cars, setCars] = useState([]);
 
-  useEffect(() => {
-    loadBookings();
-  }, []);
+  // Suponiendo que `getCars` devuelve la lista de coches
+useEffect(() => {
+  const fetchCars = async () => {
+    try {
+      const data = await getCars();
+      setCars(data); // Guardamos los coches en el estado
+    } catch (error) {
+      console.error('Error al cargar los coches:', error);
+    }
+  };
+  fetchCars();
+  loadBookings();
+}, []);
 
   const loadBookings = async () => {
     try {
@@ -52,6 +64,15 @@ function BookingList() {
   const handleCloseForm = () => {
     setShowForm(false);
     setSelectedBooking(null); // Limpiar la reserva seleccionada
+  };
+
+  const getCarMatricula = (cocheID) => {
+    const car = cars.find((car) => car.id === cocheID); // Buscamos el coche por id
+    return car ? car.matricula : 'Coche no encontrado'; // Devolvemos la matrícula o un mensaje de error
+  };
+  const getCarModelo = (cocheID) => {
+    const car = cars.find((car) => car.id === cocheID); // Buscamos el coche por id
+    return car ? car.modelo : 'Coche no encontrado'; // Devolvemos la matrícula o un mensaje de error
   };
   
 
@@ -83,7 +104,7 @@ function BookingList() {
 
   // Filtrar las reservas basado en el término de búsqueda
   const filteredBookings = bookings.filter(booking => 
-    String(booking.roomNumber).toLowerCase().includes(searchTerm.toLowerCase())
+    String(booking.id).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const parseCustomDate = (dateString) => {
@@ -141,7 +162,7 @@ function BookingList() {
       <TextField
         fullWidth
         variant="outlined"
-        placeholder="Buscar por número de habitación..."
+        placeholder="Buscar por ID..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         sx={{
@@ -171,8 +192,8 @@ function BookingList() {
         }}
       />
       <Dialog open={showForm} onClose={() => setShowForm(false)}>
-        <DialogTitle>{selectedBooking ? 'Actualizar Reserva' : 'Crear Reserva'}</DialogTitle>
-        <DialogContent>
+        {/* <DialogTitle>{selectedBooking ? 'Actualizar Reserva' : 'Crear Reserva11111'}</DialogTitle> */}
+        <DialogContent sx={{  }}>
           <CrearReserva 
             onClose={handleCloseForm}
             onReservaCreada={handleReservaCreada} 
@@ -191,7 +212,7 @@ function BookingList() {
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Habitación</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Fecha Inicio</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Fecha Fin</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Coche</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Vehículo</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Nombre del Hotel</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Acciones</TableCell>
             </TableRow>
@@ -211,13 +232,26 @@ function BookingList() {
                   {' '}
                   {formatTime(parseCustomDate(booking.fechaFin))}
                 </TableCell>
-                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.cocheID}</TableCell>
+                {/* <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.cocheID}</TableCell> */}
+                <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>
+                  {getCarMatricula(booking.cocheID)} {/* Mostramos la matrícula del coche */}
+                  {getCarModelo(booking.cocheID)}
+                </TableCell>
                 <TableCell sx={{ fontWeight: 500, fontSize: '1.1rem' }}>{booking.hotelname}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleUpdateBooking(booking)} color="primary" sx={{ mr: 1 }}>
+                  <IconButton onClick={() => handleUpdateBooking(booking)} color="primary" sx={{ 
+                      mr: 1,
+                      '&:hover': {
+                        backgroundColor: 'primary.light'
+                      }
+                    }}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDeleteBooking(booking.id)} color="error">
+                  <IconButton onClick={() => handleDeleteBooking(booking.id)} color="error" sx={{
+                      '&:hover': {
+                        backgroundColor: 'error.light'
+                      }
+                    }}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

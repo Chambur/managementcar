@@ -28,7 +28,7 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
       {/* Contenedor central para los botones */}
     <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
       <Button onClick={() => navigate('/cars')} color="inherit">Gasolina</Button>
-      <Button onClick={() => navigate('/BookingList')} color="inherit">Reservas</Button>
+      <Button onClick={() => navigate('/bookings')} color="inherit">Reservas</Button>
     </Box>
 
     {/* Contenedor para los íconos (a la derecha) */}

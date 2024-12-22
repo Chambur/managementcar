@@ -110,11 +110,12 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
     <Container maxWidth="md">
       <Box
         sx={{
-          mt: 4,
-          mb: 4,
+          mt: 10,
+          mb: 10,
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
+          width: '550px'
         }}
       >
         <Paper
@@ -203,6 +204,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
                 value={cocheID}
                 onChange={(e) => setCocheID(e.target.value)}
                 fullWidth
+                
               >
                 {cars.map((car) => (
                   <MenuItem key={car.id} value={car.id}>
