@@ -101,29 +101,39 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
       onReservaCreada();
       onClose();
     } catch (error) {
-      console.error('Error al procesar la reserva:', error);
-      setError('Error al procesar la reserva.');
+      //ESTAMOS AQUI, INTENTANDO MOSTRAR EL ERROR POR PANTALLA QUE NOS ENVIA EL BACKEND
+      // Verificar si el error tiene una respuesta y un mensaje
+      if (error.response && error.response.data) {
+        setError(error.response.data.message); // Establecer el mensaje de error del backend
+      } else {
+        setError('Error al procesar la reserva.'); // Mensaje genérico si no hay un mensaje específico
+      }
     }
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="xl" sx={{}}>
       <Box
         sx={{
-          mt: 10,
-          mb: 10,
+          mt: 5,
+          mb: 5,
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
-          width: '550px'
+          //  width: '550px'
+          boxSizing: 'content-box',
+          width: '100%',
+          
         }}
       >
         <Paper
           elevation={3}
           sx={{
             p: 4,
-            borderRadius: 2,
+            borderRadius: '8px',
             backgroundColor: 'background.paper',
+            maxWidth: '100%', // Evita que el Paper se salga de su contenedor
+            overflowX: 'auto', // Permite el desplazamiento horizontal solo si es necesario
           }}
         >
           <Typography

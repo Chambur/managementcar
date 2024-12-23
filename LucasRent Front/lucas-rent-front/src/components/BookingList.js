@@ -191,8 +191,11 @@ useEffect(() => {
           ),
         }}
       />
-      <Dialog open={showForm} onClose={() => setShowForm(false)}>
-        {/* <DialogTitle>{selectedBooking ? 'Actualizar Reserva' : 'Crear Reserva11111'}</DialogTitle> */}
+      <Dialog open={showForm} onClose={() => setShowForm(false)} maxWidth="md" fullWidth={true} sx={{
+    '& .MuiDialog-container': {
+     
+    },
+  }}>
         <DialogContent sx={{  }}>
           <CrearReserva 
             onClose={handleCloseForm}
