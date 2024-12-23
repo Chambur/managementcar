@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.lucas.fuel.LucasRent.model.Booking;
+import com.lucas.fuel.LucasRent.model.ErrorResponse;
 import com.lucas.fuel.LucasRent.service.BookingService;
 import com.lucas.fuel.LucasRent.service.CocheService;
+import com.lucas.fuel.LucasRent.repository.BookingRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,7 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final CocheService cocheService;
+    private final BookingRepository bookingRepository;
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
     //Reupdated
@@ -40,7 +43,7 @@ public class BookingController {
 
     // Método POST: Crea una nueva reserva
     @PostMapping
-    public ResponseEntity<Booking> createNewBooking(@RequestBody Booking booking) {
+    public ResponseEntity<?> createNewBooking(@RequestBody Booking booking) {
         try {
             // Mostrar los datos recibidos en la consola usando logger
             logger.info("Datos recibidos: {}", booking);
@@ -48,6 +51,19 @@ public class BookingController {
             // Validamos que el coche existe
             if (cocheService.findById(booking.getCocheID()) == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Coche no encontrado
+            }
+            // Comprobar si el coche ya está reservado en el rango de fechas
+            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
+                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio());
+
+            if (!existingBookings.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ErrorResponse("El coche con matrícula " + booking.getCocheID() + " ya está reservado en las fechas seleccionadas."));
+            }
+            // Comprobar si la reserva ya existe
+            if (bookingRepository.existsByRoomNumberAndFechaInicioAndFechaFin(
+                booking.getRoomNumber(), booking.getFechaInicio(), booking.getFechaFin())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("La reserva ya existe")); // Reserva ya existe
             }
 
             // Crear la reserva
