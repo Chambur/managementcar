@@ -18,7 +18,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   const today = new Date();
   const defaultRoomNumber = '103';
   const defaultFechaFin = new Date(today);
-  defaultFechaFin.setDate(today.getDate() + 22 - today.getDate());
+  defaultFechaFin.setDate(today.getDate() + 25 - today.getDate());
   const defaultHotelname = 'Hotel de pruebas';
 
   const [roomNumber, setRoomNumber] = useState(defaultRoomNumber);
@@ -101,13 +101,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
       onReservaCreada();
       onClose();
     } catch (error) {
-      //ESTAMOS AQUI, INTENTANDO MOSTRAR EL ERROR POR PANTALLA QUE NOS ENVIA EL BACKEND
-      // Verificar si el error tiene una respuesta y un mensaje
-      if (error.response && error.response.data) {
-        setError(error.response.data.message); // Establecer el mensaje de error del backend
-      } else {
-        setError('Error al procesar la reserva.'); // Mensaje genérico si no hay un mensaje específico
-      }
+      setError(error.message);
     }
   };
 

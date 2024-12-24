@@ -152,35 +152,43 @@ export const getBookings = async () => {
 
 export const createBooking = async (bookingData) => {
   const auth = localStorage.getItem('auth');
-  try {
-    //console.log("Entrando al POST");
-    //console.log('Enviando datos de la reserva al backend:', JSON.stringify(bookingData, null, 2));
 
+  try {
     const response = await fetch(`${API_URL}/api/booking`, {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + auth,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify(bookingData)
+      body: JSON.stringify(bookingData),
     });
 
+    // Si la respuesta no es exitosa, intentamos extraer el mensaje del backend
     if (!response.ok) {
-      throw new Error('Error al crear la reserva');
-    }
+      let errorMessage = 'Error al crear la reserva';
 
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
+    }
+    // Si todo va bien, devolvemos los datos de la reserva creada
     return await response.json();
   } catch (error) {
-    console.error('Error al crear la reserva:', error);
-    throw error;
+    console.error('Error al crear la reserva:', error.message);
+    throw error; // Propagar el error para manejarlo en el nivel superior
   }
 };
+
 
 export const updateBooking = async (id, bookingData) => {
   const auth = localStorage.getItem('auth');
   try {
-    console.log('Actualizando reserva con datos:', JSON.stringify(bookingData, null, 2));
+    //console.log('Actualizando reserva con datos:', JSON.stringify(bookingData, null, 2));
 
     const response = await fetch(`${API_URL}/api/booking/${id}`, {
       method: 'PUT',
@@ -192,8 +200,17 @@ export const updateBooking = async (id, bookingData) => {
       body: JSON.stringify(bookingData)
     });
 
+    // Si la respuesta no es exitosa, intentamos extraer el mensaje del backend
     if (!response.ok) {
-      throw new Error('Error al actualizar la reserva');
+      let errorMessage = 'Error al crear la reserva';
+
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
     }
 
     return await response.json();
