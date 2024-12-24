@@ -18,16 +18,16 @@ INSERT INTO hotels (name, addres, hotelphone) VALUES
 ('Hotel Vecindario Aeroport', 'Avenida del Atlántico 50, Vecindario', 928654321);
 
 INSERT INTO booking (room_number, fecha_inicio, fecha_fin, cocheID, hotelname) VALUES 
-(102, TIMESTAMP '2023-11-01 12:00:00', TIMESTAMP '2023-11-03 10:00:00', 1, 'Hotel Las Palmas Beach'),
-(103, TIMESTAMP '2023-11-05 15:00:00', TIMESTAMP '2023-11-07 11:00:00', 2, 'Hotel Maspalomas Resort'),
-(104, TIMESTAMP '2023-11-10 14:00:00', TIMESTAMP '2023-11-12 12:00:00', 3, 'Hotel Puerto Rico Paradise'),
-(105, TIMESTAMP '2023-11-15 16:00:00', TIMESTAMP '2023-11-18 13:00:00', 4, 'Hotel Agaete Valley'),
-(106, TIMESTAMP '2023-11-20 09:00:00', TIMESTAMP '2023-11-22 11:00:00', 5, 'Hotel Vecindario Aeroport'),
-(107, TIMESTAMP '2023-12-01 11:00:00', TIMESTAMP '2023-12-05 09:00:00', 6, 'Hotel Las Palmas Beach'),
-(108, TIMESTAMP '2023-12-07 10:00:00', TIMESTAMP '2023-12-10 14:00:00', 7, 'Hotel Maspalomas Resort'),
-(109, TIMESTAMP '2023-12-12 13:00:00', TIMESTAMP '2023-12-15 12:00:00', 8, 'Hotel Puerto Rico Paradise'),
-(110, TIMESTAMP '2023-12-18 14:00:00', TIMESTAMP '2023-12-20 11:00:00', 9, 'Hotel Agaete Valley'),
-(111, TIMESTAMP '2023-12-25 15:00:00', TIMESTAMP '2023-12-28 10:00:00', 10, 'Hotel Vecindario Aeroport');
+(102, TIMESTAMP '2025-11-01 12:00:00', TIMESTAMP '2025-11-03 10:00:00', 1, 'Hotel Las Palmas Beach'),
+(103, TIMESTAMP '2025-11-05 15:00:00', TIMESTAMP '2025-11-07 11:00:00', 2, 'Hotel Maspalomas Resort'),
+(104, TIMESTAMP '2025-11-10 14:00:00', TIMESTAMP '2025-11-12 12:00:00', 3, 'Hotel Puerto Rico Paradise'),
+(105, TIMESTAMP '2025-11-15 16:00:00', TIMESTAMP '2025-11-18 13:00:00', 4, 'Hotel Agaete Valley'),
+(106, TIMESTAMP '2025-11-20 09:00:00', TIMESTAMP '2025-11-22 11:00:00', 5, 'Hotel Vecindario Aeroport'),
+(107, TIMESTAMP '2025-12-01 11:00:00', TIMESTAMP '2025-12-05 09:00:00', 6, 'Hotel Las Palmas Beach'),
+(108, TIMESTAMP '2025-12-07 10:00:00', TIMESTAMP '2025-12-10 14:00:00', 7, 'Hotel Maspalomas Resort'),
+(109, TIMESTAMP '2025-12-12 13:00:00', TIMESTAMP '2025-12-15 12:00:00', 8, 'Hotel Puerto Rico Paradise'),
+(110, TIMESTAMP '2025-12-18 14:00:00', TIMESTAMP '2025-12-20 11:00:00', 9, 'Hotel Agaete Valley'),
+(111, TIMESTAMP '2025-12-25 15:00:00', TIMESTAMP '2025-12-28 10:00:00', 10, 'Hotel Vecindario Aeroport');
 
 
 -- También podemos añadir algunos usuarios de ejemplo

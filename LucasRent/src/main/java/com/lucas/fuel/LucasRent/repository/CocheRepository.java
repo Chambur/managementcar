@@ -6,6 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface CocheRepository extends JpaRepository<Coche, Long> {
-    Optional<Coche> findByMatricula(String matricula);
+    Optional<Coche> findById(Long id);
     boolean existsByMatricula(String matricula);
+    
+    interface MatriculaProjection {
+        String getMatricula();
+        String getModelo();
+    }
+    Optional<MatriculaProjection> findMatriculaById(Long id);
 } 

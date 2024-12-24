@@ -1,6 +1,7 @@
 package com.lucas.fuel.LucasRent.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import com.lucas.fuel.LucasRent.model.ErrorResponse;
 import com.lucas.fuel.LucasRent.service.BookingService;
 import com.lucas.fuel.LucasRent.service.CocheService;
 import com.lucas.fuel.LucasRent.repository.BookingRepository;
+import com.lucas.fuel.LucasRent.repository.CocheRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +27,7 @@ public class BookingController {
     private final CocheService cocheService;
     private final BookingRepository bookingRepository;
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
-
+    private final CocheRepository obtenercoche;
     //Reupdated
     // Método GET: Devuelve una lista de Booking
     @GetMapping
@@ -46,7 +48,8 @@ public class BookingController {
     public ResponseEntity<?> createNewBooking(@RequestBody Booking booking) {
         try {
             // Mostrar los datos recibidos en la consola usando logger
-            logger.info("Datos recibidos: {}", booking);
+            //logger.info("Datos recibidos: {}", booking);
+            Optional<CocheRepository.MatriculaProjection> matricula = obtenercoche.findMatriculaById(booking.getCocheID());
 
             // Validamos que el coche existe
             if (cocheService.findById(booking.getCocheID()) == null) {
@@ -58,14 +61,8 @@ public class BookingController {
 
             if (!existingBookings.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ErrorResponse("El coche con matrícula " + booking.getCocheID() + " ya está reservado en las fechas seleccionadas."));
+                        .body(new ErrorResponse("El coche con matrícula " + matricula.get().getMatricula() + "  " + matricula.get().getModelo() + " ya está reservado en las fechas seleccionadas."));
             }
-            // Comprobar si la reserva ya existe
-            if (bookingRepository.existsByRoomNumberAndFechaInicioAndFechaFin(
-                booking.getRoomNumber(), booking.getFechaInicio(), booking.getFechaFin())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("La reserva ya existe")); // Reserva ya existe
-            }
-
             // Crear la reserva
             Booking createdBooking = bookingService.newBooking(booking);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
@@ -77,13 +74,21 @@ public class BookingController {
 
     // Método PUT: Actualiza una reserva por ID
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(@PathVariable Long id, @RequestBody Booking booking) {
+    public ResponseEntity<?> updateBooking(@PathVariable Long id, @RequestBody Booking booking) {
         try {
             // Validar que el coche existe
             if (cocheService.findById(booking.getCocheID()) == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Coche no encontrado
             }
+            Optional<CocheRepository.MatriculaProjection> matricula = obtenercoche.findMatriculaById(booking.getCocheID());
 
+            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
+                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio());
+
+            if (!existingBookings.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ErrorResponse("El coche con matrícula " + matricula.get().getMatricula() + "  " + matricula.get().getModelo() + " ya está reservado en las fechas seleccionadas."));
+            }
             // Actualizar la reserva
             booking.setId(id); // Asegúrate de que el ID se establece correctamente
             Booking updatedBooking = bookingService.updateBooking(id, booking);
