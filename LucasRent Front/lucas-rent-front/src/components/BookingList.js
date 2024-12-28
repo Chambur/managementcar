@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Box, 
   Typography, 
@@ -11,19 +11,23 @@ import {
   TableRow, 
   Paper, 
   Dialog, 
-  DialogTitle, 
   DialogContent, 
-  DialogActions, 
   TextField, 
   InputAdornment, 
   Alert, 
   IconButton 
 } from '@mui/material';
-import { getBookings, deleteBooking } from '../services/api';
+import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+
+import { deleteBooking, getCars, getBookingsmonth } from '../services/api';
 import CrearReserva from './BookingForm'; // Importar el nuevo componente
 import { Search as SearchIcon, Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, } from '@mui/icons-material';
 import { format } from 'date-fns'; // Asegúrate de importar parseISO y format
-import { getCars } from '../services/api';
+
+import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { es } from 'date-fns/locale/es';
 
 function BookingList() {
   const [bookings, setBookings] = useState([]);
@@ -33,8 +37,27 @@ function BookingList() {
   const [selectedBooking, setSelectedBooking] = useState(null); // Estado para la reserva seleccionada
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
   const [cars, setCars] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Suponiendo que `getCars` devuelve la lista de coches
+ // Define `loadBookings` primero
+const loadBookings = useCallback(async () => {
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth() + 1;
+  //console.log("este es el año:" + year + " este es el mes:" + month);
+  try {
+    setLoading(true);
+    setError('');
+    const data = await getBookingsmonth(year, month);
+    setBookings(data);
+  } catch (error) {
+    console.error('', error);
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+}, [selectedDate]);
+
+// `useEffect` para cargar los coches
 useEffect(() => {
   const fetchCars = async () => {
     try {
@@ -42,25 +65,18 @@ useEffect(() => {
       setCars(data); // Guardamos los coches en el estado
     } catch (error) {
       console.error('Error al cargar los coches:', error);
+      setError(error.message);
     }
   };
   fetchCars();
-  loadBookings();
-}, []);
+}, []); // Solo se ejecuta una vez al montar el componente
 
-  const loadBookings = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const data = await getBookings();
-      setBookings(data);
-    } catch (error) {
-      console.error('Error al cargar las reservas:', error);
-      setError('Error al cargar las reservas.');
-    } finally {
-      setLoading(false);
-    }
-  };
+// `useEffect` para cargar las reservas al cambiar `selectedDate`
+useEffect(() => {
+  loadBookings();
+}, [loadBookings]);
+
+
   const handleCloseForm = () => {
     setShowForm(false);
     setSelectedBooking(null); // Limpiar la reserva seleccionada
@@ -130,6 +146,7 @@ useEffect(() => {
   }
 
   return (
+    
     <Box sx={{ p: 3, maxWidth: 1200, margin: '0 auto' }}>
       <Box sx={{ 
         display: 'flex', 
@@ -159,6 +176,7 @@ useEffect(() => {
       </Box>
       
       
+      {/* Buscador.. */}
       <TextField
         fullWidth
         variant="outlined"
@@ -203,13 +221,27 @@ useEffect(() => {
             booking={selectedBooking} // Pasar la reserva seleccionada para actualizar
           />
         </DialogContent>
-        <DialogActions>
-          {/* <Button onClick={handleCloseForm}>Cancelar</Button> */}
-        </DialogActions>
       </Dialog>
+
+      {/* Componente del calendario date-fns */}
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+        <DatePicker
+          views={['month', 'year']}
+          label="Seleccionar Mes y Año"
+          value={selectedDate}
+          onChange={(newValue) => setSelectedDate(newValue)} // Solo actualiza la fecha seleccionada
+          renderInput={(params) => <TextField {...params} fullWidth />}
+          slots={{ openPickerIcon: CalendarMonthRoundedIcon }}
+        />
+      </Box>
+
+      {/* Renderiza las reservas aquí */}
+    </LocalizationProvider>
+
+          
       <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, overflow: 'hidden' }}>
         <Table>
-          
           <TableHead>
             <TableRow sx={{ backgroundColor: 'primary.main' }}>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>ID</TableCell>

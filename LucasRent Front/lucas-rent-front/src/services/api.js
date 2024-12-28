@@ -149,6 +149,36 @@ export const getBookings = async () => {
     throw error;
   }
 };
+export const getBookingsmonth = async (year, month) => {
+  const auth = localStorage.getItem('auth');
+  try {
+    //console.log("Entrando al GET");
+    const response = await fetch(`http://localhost:8080/api/booking/month/${year}/${month}`, {
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'Error al obtener las reservas';
+
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al obtener las reservas:', error.message);
+    throw error;
+  }
+};
 
 export const createBooking = async (bookingData) => {
   const auth = localStorage.getItem('auth');
