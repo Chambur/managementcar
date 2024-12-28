@@ -13,7 +13,19 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByFechaInicioBetween(LocalDateTime start, LocalDateTime end);
     Optional<Booking> findByRoomNumberAndFechaInicioAndFechaFin(Integer roomNumber, LocalDateTime fechaInicio, LocalDateTime fechaFin);
     boolean existsByRoomNumberAndFechaInicioAndFechaFin(Integer roomNumber, LocalDateTime fechaInicio, LocalDateTime fechaFin);
-    // Método para verificar si un coche está reservado en un rango de fechas
-    List<Booking> findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(Long cocheID, LocalDateTime fechaFin, LocalDateTime fechaInicio);
+    
+    // // Método para verificar si un coche está reservado en un rango de fechas
+    // List<Booking> findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(Long cocheID, LocalDateTime fechaFin, LocalDateTime fechaInicio);
+
+    // Método modificado para excluir la reserva que se está editando
+    List<Booking> findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqualAndIdNot(
+        Long cocheID, 
+        LocalDateTime fechaFin, 
+        LocalDateTime fechaInicio,
+        Long bookingId
+    );
+
+    List<Booking> findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
+        Long cocheID, LocalDateTime fechaFin, LocalDateTime fechaInicio);
 
 } 

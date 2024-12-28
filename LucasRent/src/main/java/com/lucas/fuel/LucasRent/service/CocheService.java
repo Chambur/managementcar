@@ -5,12 +5,14 @@ import com.lucas.fuel.LucasRent.repository.CocheRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class CocheService {
 
     private final CocheRepository cocheRepository;
@@ -45,6 +47,13 @@ public class CocheService {
     public Coche findById(Long id) {
         return cocheRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Coche no encontrado con ID: " + id));
+    }
+
+    public void actualizarEstadoReservado(Long id, boolean reservado) {
+        int filasActualizadas = cocheRepository.actualizarEstadoReservado(id, reservado);
+        if (filasActualizadas == 0) {
+            throw new RuntimeException("Coche no encontrado con ID: " + id);
+        }
     }
 
 } 

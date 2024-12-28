@@ -36,5 +36,12 @@ public class CocheController implements Serializable{
         cocheService.eliminarCoche(id);
         return ResponseEntity.ok().build();
     }
-    
+
+    @PutMapping("/{id}/reservado")
+    public ResponseEntity<Void> actualizarEstadoReservado(
+            @PathVariable Long id,
+            @RequestParam boolean reservado) {
+        cocheService.actualizarEstadoReservado(id, reservado);
+        return ResponseEntity.ok().build();
+    }
 }

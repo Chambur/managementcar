@@ -97,8 +97,8 @@ public class BookingController {
             }
             Optional<CocheRepository.MatriculaProjection> matricula = obtenercoche.findMatriculaById(booking.getCocheID());
 
-            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
-                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio());
+            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqualAndIdNot(
+                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio(), id);
 
             if (!existingBookings.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
