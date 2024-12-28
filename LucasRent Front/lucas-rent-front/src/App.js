@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import { useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 
@@ -9,7 +9,6 @@ import CarList from './components/CarList';
 import CarForm from './components/CarForm';
 import Navbar from './components/Navbar';
 import BookingList from './components/BookingList';
-import BannerImage from './images/banner2.jpg';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -27,18 +26,46 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-      <img 
-        src={BannerImage} 
-        alt="Banner" 
-        style={{ width: '100%', height: '150px', objectFit: 'cover' }} // Ajustar altura y mantener proporciones
-      /> 
-        {isAuthenticated && (
-          <Navbar 
-            darkMode={darkMode} 
-            setDarkMode={setDarkMode} 
-            setIsAuthenticated={setIsAuthenticated} 
+        <Box sx={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          lineHeight: 0
+        }}>
+          <Box 
+            sx={{
+              height: '200px',
+              background: theme => theme.palette.mode === 'dark'
+                ? 'linear-gradient(45deg, #1a237e, #311b92, #4a148c)' 
+                : 'linear-gradient(45deg, #42a5f5, #2196f3, #1976d2)',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%)',
+                animation: 'rotate 15s linear infinite',
+              },
+              '@keyframes rotate': {
+                '0%': {
+                  transform: 'rotate(0deg)',
+                },
+                '100%': {
+                  transform: 'rotate(360deg)',
+                }
+              }
+            }}
           />
-        )}
+          {isAuthenticated && (
+            <Navbar 
+              darkMode={darkMode} 
+              setDarkMode={setDarkMode} 
+              setIsAuthenticated={setIsAuthenticated} 
+            />
+          )}
+        </Box>
+
         <Routes>
           <Route 
             path="/login" 

@@ -106,38 +106,49 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   };
 
   return (
-    <Container maxWidth="xl" sx={{}}>
+    <Container maxWidth="xl">
       <Box
         sx={{
-          mt: 5,
-          mb: 5,
+          mt: 3,
+          mb: 3,
           display: 'flex',
           flexDirection: 'column',
-          gap: 2,
-          //  width: '550px'
-          boxSizing: 'content-box',
+          gap: 3,
           width: '100%',
-          
         }}
       >
         <Paper
-          elevation={3}
+          elevation={0}
           sx={{
             p: 4,
-            borderRadius: '8px',
-            backgroundColor: 'background.paper',
-            maxWidth: '100%', // Evita que el Paper se salga de su contenedor
-            overflowX: 'auto', // Permite el desplazamiento horizontal solo si es necesario
+            borderRadius: 2,
+            background: theme => 
+              theme.palette.mode === 'dark'
+                ? 'linear-gradient(180deg, rgba(26, 32, 53, 0.95) 0%, rgba(28, 35, 58, 0.95) 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 245, 255, 0.95) 100%)',
+            backdropFilter: 'blur(8px)',
+            border: theme => 
+              theme.palette.mode === 'dark'
+                ? '1px solid rgba(255,255,255,0.05)'
+                : '1px solid rgba(25, 70, 186, 0.1)',
+            boxShadow: theme => `0 6px 20px ${
+              theme.palette.mode === 'dark' 
+                ? 'rgba(0,0,0,0.4)'
+                : 'rgba(25, 70, 186, 0.15)'
+            }`,
           }}
         >
           <Typography
             variant="h5"
-            component="h2"
             gutterBottom
             sx={{
-              fontWeight: 'medium',
-              color: 'primary.main',
-              mb: 3,
+              fontWeight: 600,
+              color: theme => 
+                theme.palette.mode === 'dark'
+                  ? 'rgba(255,255,255,0.9)'
+                  : '#1565c0',
+              mb: 4,
+              letterSpacing: '0.5px',
             }}
           >
             {booking ? 'Editar Reserva' : 'Nueva Reserva'}
@@ -149,6 +160,14 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               sx={{
                 mb: 3,
                 borderRadius: 2,
+                backgroundColor: theme =>
+                  theme.palette.mode === 'dark'
+                    ? 'rgba(211, 47, 47, 0.15)'
+                    : 'rgba(211, 47, 47, 0.05)',
+                border: '1px solid rgba(211, 47, 47, 0.2)',
+                '& .MuiAlert-icon': {
+                  color: '#d32f2f',
+                },
               }}
             >
               {error}
@@ -158,7 +177,11 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 3 
+            }}
           >
             <TextField
               required
@@ -166,11 +189,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               value={roomNumber}
               onChange={(e) => setRoomNumber(e.target.value)}
               fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                },
-              }}
+              sx={textFieldStyle}
             />
 
             <TextField
@@ -180,11 +199,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               value={fechaInicio}
               onChange={(e) => setFechaInicio(e.target.value)}
               fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                },
-              }}
+              sx={textFieldStyle}
             />
 
             <TextField
@@ -194,24 +209,27 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
               value={fechaFin}
               onChange={(e) => setFechaFin(e.target.value)}
               fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                },
-              }}
+              sx={textFieldStyle}
             />
 
             <FormControl fullWidth>
-              <InputLabel id="cocheID-label">Coche</InputLabel>
+              <InputLabel sx={selectLabelStyle}>Vehículo</InputLabel>
               <Select
-                labelId="cocheID-label"
                 value={cocheID}
                 onChange={(e) => setCocheID(e.target.value)}
-                fullWidth
-                
+                sx={selectStyle}
+                MenuProps={{
+                  PaperProps: {
+                    sx: menuPaperStyle
+                  }
+                }}
               >
                 {cars.map((car) => (
-                  <MenuItem key={car.id} value={car.id}>
+                  <MenuItem 
+                    key={car.id} 
+                    value={car.id}
+                    sx={menuItemStyle}
+                  >
                     {`${car.matricula} - ${car.modelo}`}
                   </MenuItem>
                 ))}
@@ -219,38 +237,76 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
             </FormControl>
 
             <FormControl fullWidth>
-            <InputLabel id="hotelname-label">Hotel</InputLabel>
-            <Select
-              labelId="hotelname-label"
-              value={hotelname}
-              onChange={(e) => setHotelname(e.target.value)}
-              fullWidth
-            >
-              {hotels.map((hotel) => (
-                <MenuItem key={hotel.id} value={hotel.name}>
-                  {hotel.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
+              <InputLabel sx={selectLabelStyle}>Hotel</InputLabel>
+              <Select
+                value={hotelname}
+                onChange={(e) => setHotelname(e.target.value)}
+                sx={selectStyle}
+                MenuProps={{
+                  PaperProps: {
+                    sx: menuPaperStyle
+                  }
+                }}
+              >
+                {hotels.map((hotel) => (
+                  <MenuItem 
+                    key={hotel.id} 
+                    value={hotel.name}
+                    sx={menuItemStyle}
+                  >
+                    {hotel.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <Box
               sx={{
-                mt: 3,
+                mt: 2,
                 display: 'flex',
                 gap: 2,
-                '& button': {
-                  borderRadius: 2,
-                  py: 1.5,
-                  textTransform: 'none',
-                },
               }}
             >
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{
+                  py: 1.5,
+                  borderRadius: '28px',
+                  textTransform: 'none',
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                  background: theme => 
+                    theme.palette.mode === 'dark'
+                      ? 'linear-gradient(45deg, #1a237e 30%, #311b92 90%)'
+                      : 'linear-gradient(45deg, #1565c0 30%, #0d47a1 90%)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',
+                  }
+                }}
+              >
                 {booking ? 'Actualizar Reserva' : 'Crear Reserva'}
               </Button>
-              <Button variant="outlined" fullWidth onClick={onClose}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={onClose}
+                sx={{
+                  py: 1.5,
+                  borderRadius: '28px',
+                  textTransform: 'none',
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                  borderWidth: '2px',
+                  '&:hover': {
+                    borderWidth: '2px',
+                  }
+                }}
+              >
                 Cancelar
               </Button>
             </Box>
@@ -260,5 +316,86 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
     </Container>
   );
 }
+
+// Estilos comunes para los campos de texto
+const textFieldStyle = {
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 2,
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark'
+        ? 'rgba(255,255,255,0.05)'
+        : 'rgba(255,255,255,0.7)',
+    '& fieldset': {
+      borderColor: theme =>
+        theme.palette.mode === 'dark'
+          ? 'rgba(255,255,255,0.1)'
+          : 'rgba(25, 70, 186, 0.2)',
+    },
+    '&:hover fieldset': {
+      borderColor: theme =>
+        theme.palette.mode === 'dark'
+          ? 'rgba(255,255,255,0.2)'
+          : 'rgba(25, 70, 186, 0.3)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme =>
+        theme.palette.mode === 'dark'
+          ? '#1a237e'
+          : '#1565c0',
+    }
+  }
+};
+
+// Estilos para los selects
+const selectStyle = {
+  ...textFieldStyle,
+  '& .MuiSelect-select': {
+    padding: '13px 14px',
+  }
+};
+
+// Estilos para las etiquetas de los selects
+const selectLabelStyle = {
+  backgroundColor: 'transparent',
+  px: 1,
+};
+
+// Estilos para el menú desplegable
+const menuPaperStyle = {
+  mt: 1,
+  borderRadius: 2,
+  backgroundColor: theme =>
+    theme.palette.mode === 'dark'
+      ? 'rgba(26, 32, 53, 0.95)'
+      : 'rgba(255, 255, 255, 0.95)',
+  backdropFilter: 'blur(8px)',
+  boxShadow: theme => `0 6px 20px ${
+    theme.palette.mode === 'dark' 
+      ? 'rgba(0,0,0,0.4)'
+      : 'rgba(25, 70, 186, 0.15)'
+  }`,
+};
+
+// Estilos para los items del menú
+const menuItemStyle = {
+  '&:hover': {
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark'
+        ? 'rgba(255,255,255,0.05)'
+        : 'rgba(25, 70, 186, 0.05)',
+  },
+  '&.Mui-selected': {
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark'
+        ? 'rgba(255,255,255,0.1)'
+        : 'rgba(25, 70, 186, 0.1)',
+    '&:hover': {
+      backgroundColor: theme =>
+        theme.palette.mode === 'dark'
+          ? 'rgba(255,255,255,0.15)'
+          : 'rgba(25, 70, 186, 0.15)',
+    }
+  }
+};
 
 export default BookingForm;
