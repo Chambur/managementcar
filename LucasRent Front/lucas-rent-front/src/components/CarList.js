@@ -27,7 +27,8 @@ import {
   Check as CheckIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { getCars, deleteCar } from '../services/api';
+import { getCars, deleteCar, getTodayBookings, updateCarReservationStatus } from '../services/api';
+import { format } from 'date-fns';
 
 // Añade este estilo para el botón
 const addButtonStyle = {
@@ -49,6 +50,46 @@ const addButtonStyle = {
   }
 };
 
+// Componente para la matrícula
+const LicensePlate = ({ text }) => (
+  <Box
+    sx={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      border: '2px solid #000',
+      borderRadius: '4px',
+      padding: '4px 12px',
+      position: 'relative',
+      fontFamily: 'Consolas, monospace',
+      fontSize: '1.1rem',
+      fontWeight: 'bold',
+      color: '#000',
+      minWidth: '120px',
+      height: '30px',
+      justifyContent: 'center',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '20px',
+        height: '100%',
+        background: 'linear-gradient(90deg, #0055aa 0%, #0055aa 100%)',
+        borderTopLeftRadius: '2px',
+        borderBottomLeftRadius: '2px',
+      },
+      '& span': {
+        marginLeft: '8px',
+        letterSpacing: '1px'
+      }
+    }}
+  >
+    <span>{text}</span>
+  </Box>
+);
+
 function CarList() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,10 +103,46 @@ function CarList() {
     loadCars();
   }, []);
 
+  const parseCustomDate = (dateString) => {
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('-');
+    const [hours, minutes] = timePart.split(':');
+    
+    // Crear un nuevo objeto Date
+    return new Date(year, month - 1, day, hours, minutes); // month - 1 porque los meses en JavaScript son 0-indexados
+  };
+
+  const checkAndUpdateReservations = async () => {
+    try {
+      const todayBookings = await getTodayBookings();
+      const now = new Date();
+
+      for (const booking of todayBookings) {
+        const startDate = parseCustomDate(booking.fechaInicio);
+        const endDate = parseCustomDate(booking.fechaFin);
+
+        if (now >= startDate && now <= endDate) {
+          // La reserva está activa ahora
+          await updateCarReservationStatus(booking.cocheID, true);
+        } else if (now > endDate) {
+          // La reserva ha terminado
+          await updateCarReservationStatus(booking.cocheID, false);
+        }
+      }
+
+      // Recargar la lista de coches para reflejar los cambios
+      loadCars();
+    } catch (error) {
+      console.error('Error al comprobar reservas:', error);
+      setError('Error al actualizar el estado de los coches');
+    }
+  };
+
   const loadCars = async () => {
     try {
       setLoading(true);
       setError('');
+      await checkAndUpdateReservations(); // Primero actualizamos estados
       const data = await getCars();
       setCars(data);
     } catch (error) {
@@ -122,9 +199,7 @@ function CarList() {
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: 500, letterSpacing: 1 }}>
-              {car.matricula}
-            </Typography>
+            <LicensePlate text={car.matricula} />
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton 
                 onClick={() => navigate(`/cars/edit/${car.id}`)}
@@ -373,17 +448,12 @@ function CarList() {
                     {car.reservado ? <LockIcon color="error" /> : <CheckIcon color="success" />}
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ 
-                      fontWeight: 500, 
-                      letterSpacing: 1,
-                      fontSize: '1.1rem'
-                    }}>
-                      {car.matricula}
-                    </Typography>
+                    <LicensePlate text={car.matricula} />
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ 
-                      fontWeight: 500,
+                      fontWeight: 500, 
+                      letterSpacing: 1,
                       fontSize: '1.1rem'
                     }}>
                       {car.modelo}

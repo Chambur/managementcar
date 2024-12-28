@@ -90,6 +90,7 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
       fechaFin: formatDateTime(fechaFin.replace('T', ' ')),
       cocheID: parseInt(cocheID, 10),
       hotelname,
+      id: booking ? booking.id : null
     };
 
     try {

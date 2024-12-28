@@ -52,6 +52,162 @@ const addButtonStyle = {
   }
 };
 
+// Componente para la matrícula (igual que en CarList)
+const LicensePlate = ({ text }) => (
+  <Box
+    sx={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      border: '2px solid #000',
+      borderRadius: '4px',
+      padding: '4px 12px',
+      position: 'relative',
+      fontFamily: 'Consolas, monospace',
+      fontSize: '1.1rem',
+      fontWeight: 'bold',
+      color: '#000',
+      minWidth: '120px',
+      height: '30px',
+      justifyContent: 'center',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '20px',
+        height: '100%',
+        background: 'linear-gradient(90deg, #0055aa 0%, #0055aa 100%)',
+        borderTopLeftRadius: '2px',
+        borderBottomLeftRadius: '2px',
+      },
+      '& span': {
+        marginLeft: '8px',
+        letterSpacing: '1px'
+      }
+    }}
+  >
+    <span>{text}</span>
+  </Box>
+);
+
+// Componente para mostrar la fecha y hora
+const DateTimeDisplay = ({ date, isStart }) => (
+  <Box
+    sx={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 1,
+      backgroundColor: theme => 
+        theme.palette.mode === 'dark'
+          ? 'rgba(255,255,255,0.05)'
+          : 'rgba(25, 70, 186, 0.05)',
+      borderRadius: '8px',
+      padding: '6px 12px',
+      border: theme =>
+        theme.palette.mode === 'dark'
+          ? '1px solid rgba(255,255,255,0.1)'
+          : '1px solid rgba(25, 70, 186, 0.1)',
+    }}
+  >
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center',
+      borderRight: theme =>
+        theme.palette.mode === 'dark'
+          ? '1px solid rgba(255,255,255,0.1)'
+          : '1px solid rgba(25, 70, 186, 0.1)',
+      pr: 1.5
+    }}>
+      <Typography sx={{ 
+        fontSize: '0.75rem', 
+        color: 'text.secondary',
+        fontWeight: 500
+      }}>
+        {isStart ? 'DESDE' : 'HASTA'}
+      </Typography>
+      <Typography sx={{ 
+        fontSize: '1.1rem', 
+        fontWeight: 600,
+        color: theme =>
+          theme.palette.mode === 'dark'
+            ? 'rgba(255,255,255,0.9)'
+            : '#1565c0'
+      }}>
+        {date.toLocaleDateString('es-ES', { 
+          day: '2-digit',
+          month: 'short'
+        })}
+      </Typography>
+    </Box>
+    <Typography sx={{ 
+      fontSize: '1.1rem',
+      fontWeight: 500,
+      color: 'text.secondary'
+    }}>
+      {format(date, 'HH:mm')}
+    </Typography>
+  </Box>
+);
+
+// Componente para el número de habitación
+const RoomNumber = ({ number }) => (
+  <Box
+    sx={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme => 
+        theme.palette.mode === 'dark'
+          ? 'rgba(255,255,255,0.1)'
+          : 'rgba(25, 70, 186, 0.1)',
+      borderRadius: '12px',
+      padding: '6px 16px',
+      position: 'relative',
+      minWidth: '80px',
+      height: '36px',
+      border: theme =>
+        theme.palette.mode === 'dark'
+          ? '1px solid rgba(255,255,255,0.2)'
+          : '1px solid rgba(25, 70, 186, 0.2)',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+      '&::before': {
+        content: '"HAB"',
+        position: 'absolute',
+        top: '-10px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: theme =>
+          theme.palette.mode === 'dark'
+            ? '#1a237e'
+            : '#1565c0',
+        color: 'white',
+        padding: '2px 8px',
+        borderRadius: '8px',
+        fontSize: '0.7rem',
+        fontWeight: 'bold',
+        letterSpacing: '1px'
+      }
+    }}
+  >
+    <Typography
+      sx={{
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+        fontFamily: 'monospace',
+        color: theme =>
+          theme.palette.mode === 'dark'
+            ? 'rgba(255,255,255,0.9)'
+            : '#1565c0'
+      }}
+    >
+      {number}
+    </Typography>
+  </Box>
+);
+
 function BookingList() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -132,6 +288,7 @@ function BookingList() {
     // Parsear las fechas al formato que puede leer date-fns
     const updatedBooking = {
       ...booking,
+      id: booking.id, // Asegurar explícitamente el ID (opcional si booking ya tiene el ID)
       fechaInicio: format(parseCustomDate(booking.fechaInicio), 'yyyy-MM-dd\'T\'HH:mm'), // Formato adecuado
       fechaFin: format(parseCustomDate(booking.fechaFin), 'yyyy-MM-dd\'T\'HH:mm') // Formato adecuado
     };
@@ -220,9 +377,12 @@ function BookingList() {
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Vehículo
                 </Typography>
-                <Typography sx={{ fontWeight: 500 }}>
-                  {getCarMatricula(booking.cocheID)} - {getCarModelo(booking.cocheID)}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <LicensePlate text={getCarMatricula(booking.cocheID)} />
+                  <Typography sx={{ fontWeight: 500 }}>
+                    {getCarModelo(booking.cocheID)}
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
 
@@ -230,9 +390,9 @@ function BookingList() {
               <Typography variant="body2" color="text.secondary">
                 Habitación
               </Typography>
-              <Typography sx={{ fontWeight: 500 }}>
-                {booking.roomNumber}
-              </Typography>
+              <Box sx={{ mt: 1 }}>
+                <RoomNumber number={booking.roomNumber} />
+              </Box>
             </Grid>
 
             <Grid item xs={12}>
@@ -247,23 +407,18 @@ function BookingList() {
               }}>
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Fecha Inicio
+                    Fechas
                   </Typography>
-                  <Typography sx={{ fontWeight: 500 }}>
-                    {parseCustomDate(booking.fechaInicio).toLocaleDateString('es-ES')}
-                    {' '}
-                    {formatTime(parseCustomDate(booking.fechaInicio))}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Fecha Fin
-                  </Typography>
-                  <Typography sx={{ fontWeight: 500 }}>
-                    {parseCustomDate(booking.fechaFin).toLocaleDateString('es-ES')}
-                    {' '}
-                    {formatTime(parseCustomDate(booking.fechaFin))}
-                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                    <DateTimeDisplay 
+                      date={parseCustomDate(booking.fechaInicio)} 
+                      isStart={true}
+                    />
+                    <DateTimeDisplay 
+                      date={parseCustomDate(booking.fechaFin)} 
+                      isStart={false}
+                    />
+                  </Box>
                 </Box>
               </Box>
             </Grid>
@@ -560,40 +715,30 @@ function BookingList() {
                   }}
                 >
                   <TableCell>
-                    <Typography sx={{ 
-                      fontWeight: 500, 
-                      fontSize: '1.1rem'
-                    }}>
-                      {booking.roomNumber}
-                    </Typography>
+                    <RoomNumber number={booking.roomNumber} />
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ 
-                      fontWeight: 500, 
-                      fontSize: '1.1rem'
-                    }}>
-                      {parseCustomDate(booking.fechaInicio).toLocaleDateString('es-ES')} 
-                      {' '}
-                      {formatTime(parseCustomDate(booking.fechaInicio))}
-                    </Typography>
+                    <DateTimeDisplay 
+                      date={parseCustomDate(booking.fechaInicio)} 
+                      isStart={true}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ 
-                      fontWeight: 500, 
-                      fontSize: '1.1rem'
-                    }}>
-                      {parseCustomDate(booking.fechaFin).toLocaleDateString('es-ES')} 
-                      {' '}
-                      {formatTime(parseCustomDate(booking.fechaFin))}
-                    </Typography>
+                    <DateTimeDisplay 
+                      date={parseCustomDate(booking.fechaFin)} 
+                      isStart={false}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ 
-                      fontWeight: 500, 
-                      fontSize: '1.1rem'
-                    }}>
-                      {getCarMatricula(booking.cocheID)} {getCarModelo(booking.cocheID)}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <LicensePlate text={getCarMatricula(booking.cocheID)} />
+                      <Typography sx={{ 
+                        fontWeight: 500, 
+                        fontSize: '1.1rem'
+                      }}>
+                        {getCarModelo(booking.cocheID)}
+                      </Typography>
+                    </Box>
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ 

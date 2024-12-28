@@ -125,7 +125,7 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
               sx={buttonStyle}
               className={location.pathname === '/cars' ? 'active' : ''}
             >
-              Gasolina
+              Vehículos
             </Button>
             <Button 
               onClick={() => navigate('/bookings')} 

@@ -369,6 +369,59 @@ export const deleteHotel = async (id) => {
   }
 };
 
+// Obtener reservas del día actual
+export const getTodayBookings = async () => {
+  const auth = localStorage.getItem('auth');
+  try {
+    const response = await fetch(`${API_URL}/api/booking/today`, {
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener las reservas del día');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error al obtener las reservas del día:', error);
+    throw error;
+  }
+};
+
+// Actualizar estado de reserva del coche
+export const updateCarReservationStatus = async (carId, isReserved) => {
+  const auth = localStorage.getItem('auth');
+  try {
+    const response = await fetch(`${API_URL}/api/coches/${carId}/reservado?reservado=${isReserved}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Basic ' + auth,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar el estado del coche');
+    }
+
+    // Solo intentamos parsear como JSON si hay contenido
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    }
+    
+    // Si no hay contenido JSON, simplemente retornamos true para indicar éxito
+    return true;
+  } catch (error) {
+    console.error('Error al actualizar el estado del coche:', error);
+    throw error;
+  }
+};
+
 api.interceptors.request.use((config) => {
   const auth = localStorage.getItem('auth');
   if (auth) {
@@ -378,3 +431,4 @@ api.interceptors.request.use((config) => {
 });
 
 export default api; 
+
