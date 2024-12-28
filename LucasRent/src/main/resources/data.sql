@@ -27,7 +27,9 @@ INSERT INTO booking (room_number, fecha_inicio, fecha_fin, cocheID, hotelname) V
 (108, TIMESTAMP '2025-12-07 10:00:00', TIMESTAMP '2025-12-10 14:00:00', 7, 'Hotel Maspalomas Resort'),
 (109, TIMESTAMP '2025-12-12 13:00:00', TIMESTAMP '2025-12-15 12:00:00', 8, 'Hotel Puerto Rico Paradise'),
 (110, TIMESTAMP '2025-12-18 14:00:00', TIMESTAMP '2025-12-20 11:00:00', 9, 'Hotel Agaete Valley'),
-(111, TIMESTAMP '2025-12-25 15:00:00', TIMESTAMP '2025-12-28 10:00:00', 10, 'Hotel Vecindario Aeroport');
+(111, TIMESTAMP '2024-12-25 15:00:00', TIMESTAMP '2024-12-28 10:00:00', 10, 'Hotel Vecindario Aeroport'),
+(112, TIMESTAMP '2024-11-25 15:00:00', TIMESTAMP '2024-11-28 10:00:00', 10, 'Hotel Vecindario Aeroport'),
+(113, TIMESTAMP '2025-12-25 15:00:00', TIMESTAMP '2025-12-28 10:00:00', 10, 'Hotel Vecindario Aeroport');
 
 
 -- También podemos añadir algunos usuarios de ejemplo

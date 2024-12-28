@@ -1,5 +1,6 @@
 package com.lucas.fuel.LucasRent.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -53,4 +54,18 @@ public class BookingService {
         LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59);
         return bookingRepository.findByFechaInicioBetween(startOfDay, endOfDay);
     }
+    
+    public List<Booking> findBookingsByMonth(int year, int month) {
+    // Calcular el primer día del mes
+    LocalDate startDate = LocalDate.of(year, month, 1);
+    // Calcular el último día del mes
+    LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+    // Convertir a LocalDateTime
+    LocalDateTime startDateTime = startDate.atStartOfDay();
+    LocalDateTime endDateTime = endDate.atTime(23, 59, 59); // Hasta el final del día
+
+    // Buscar reservas en el rango de fechas
+    return bookingRepository.findByFechaInicioBetween(startDateTime, endDateTime);
+}
 }

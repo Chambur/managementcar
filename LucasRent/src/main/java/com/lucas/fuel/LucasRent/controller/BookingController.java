@@ -28,7 +28,8 @@ public class BookingController {
     private final BookingRepository bookingRepository;
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
     private final CocheRepository obtenercoche;
-    //Reupdated
+    
+
     // Método GET: Devuelve una lista de Booking
     @GetMapping
     public ResponseEntity<List<Booking>> obtainAllBookings() {
@@ -41,6 +42,20 @@ public class BookingController {
         List<Booking> bookings = bookingService.findBookingsForToday();
         return ResponseEntity.ok(bookings);
     }
+    // Endpoint para buscar por meses
+        @GetMapping("/month/{year}/{month}")
+        public ResponseEntity<?> getBookingsByMonth(@PathVariable int year, @PathVariable int month) {
+            try {
+                List<Booking> bookings = bookingService.findBookingsByMonth(year, month);
+                // Devuelve la lista, incluso si está vacía
+                return ResponseEntity.ok(bookings);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("Error al obtener las reservas: " + e.getMessage()));
+            }
+        }
+
     
 
     // Método POST: Crea una nueva reserva
@@ -105,4 +120,5 @@ public class BookingController {
         bookingService.deleteBooking(id);
         return ResponseEntity.ok().build();
     }
+
 }
