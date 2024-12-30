@@ -71,8 +71,8 @@ public class BookingController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Coche no encontrado
             }
             // Comprobar si el coche ya está reservado en el rango de fechas
-            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
-                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio());
+            List<Booking> existingBookings = bookingRepository.findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqualAndIdNot(
+                booking.getCocheID(), booking.getFechaFin(), booking.getFechaInicio(), booking.getId());
 
             if (!existingBookings.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)

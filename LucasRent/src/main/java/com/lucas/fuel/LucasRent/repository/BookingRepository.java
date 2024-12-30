@@ -25,7 +25,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
         Long bookingId
     );
 
-    List<Booking> findByCocheIDAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
-        Long cocheID, LocalDateTime fechaFin, LocalDateTime fechaInicio);
-
 } 

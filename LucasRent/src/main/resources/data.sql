@@ -10,7 +10,7 @@ INSERT INTO coches (matricula, modelo, color, reservado, nivel_gasolina) VALUES
 ('9771CYH', 'Audi A3', '#4682B4', false, 'LLENO'),              -- Azul acero
 ('0359RKF', 'Mazda CX-5', '#D2691E', false, 'MEDIO');           -- Marrón claro
 
-INSERT INTO hotels (name, addres, hotelphone) VALUES
+INSERT INTO hotels (name, address, hotelphone) VALUES
 ('Hotel Las Palmas Beach', 'Calle León y Castillo 123, Las Palmas de Gran Canaria', 928224578),
 ('Hotel Maspalomas Resort', 'Avenida de Tirajana 45, Maspalomas', 928760432),
 ('Hotel Puerto Rico Paradise', 'Calle Isla Margarita 10, Puerto Rico', 928345671),
