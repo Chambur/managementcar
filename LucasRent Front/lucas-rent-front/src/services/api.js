@@ -284,11 +284,21 @@ export const getHotels = async () => {
       credentials: 'include'
     });
 
+    // Si la respuesta no es exitosa, intentamos extraer el mensaje del backend
     if (!response.ok) {
-      throw new Error('Error al obtener las reservas');
+      let errorMessage = 'Error al crear la reserva';
+
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
     }
 
     return await response.json();
+
   } catch (error) {
     console.error('Error al obtener las reservas:', error);
     throw error;
@@ -299,7 +309,7 @@ export const createHotel = async (hotelData) => {
   const auth = localStorage.getItem('auth');
   try {
     //console.log("Entrando al POST");
-    //console.log('Enviando datos de la reserva al backend:', JSON.stringify(bookingData, null, 2));
+    console.log('Enviando datos de la reserva al backend:', JSON.stringify(hotelData, null, 2));
 
     const response = await fetch(`${API_URL}/api/hotels`, {
       method: 'POST',
@@ -311,13 +321,23 @@ export const createHotel = async (hotelData) => {
       body: JSON.stringify(hotelData)
     });
 
+    // Si la respuesta no es exitosa, intentamos extraer el mensaje del backend
     if (!response.ok) {
-      throw new Error('Error al crear la reserva');
+      let errorMessage = 'Error al crear la reserva';
+
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
     }
 
     return await response.json();
+
   } catch (error) {
-    console.error('Error al crear la reserva:', error);
+    console.error('Error al crear el hotel:', error);
     throw error;
   }
 };
@@ -337,13 +357,23 @@ export const updateHotel = async (id, hotelData) => {
       body: JSON.stringify(hotelData)
     });
 
+    // Si la respuesta no es exitosa, intentamos extraer el mensaje del backend
     if (!response.ok) {
-      throw new Error('Error al actualizar la reserva');
+      let errorMessage = 'Error al crear la reserva';
+
+      try {
+        const errorData = await response.json(); // Intentar obtener el cuerpo del error
+        errorMessage = errorData.message || errorMessage; // Usar el mensaje del backend si existe
+      } catch (e) {
+        console.error('No se pudo leer el cuerpo de la respuesta de error:', e);
+      }
+      throw new Error(errorMessage); // Lanzar el error con el mensaje adecuado
     }
 
     return await response.json();
+    
   } catch (error) {
-    console.error('Error al actualizar la reserva:', error);
+    console.error('Error al actualizar el hotel:', error);
     throw error;
   }
 };
@@ -361,10 +391,10 @@ export const deleteHotel = async (id) => {
     });
 
     if (!response.ok) {
-      throw new Error('Error al eliminar la reserva');
+      throw new Error('Error al eliminar el hotel');
     }
   } catch (error) {
-    console.error('Error al eliminar la reserva:', error);
+    console.error('Error al eliminar el hotel:', error);
     throw error;
   }
 };

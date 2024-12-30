@@ -19,12 +19,11 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
   const defaultRoomNumber = '103';
   const defaultFechaFin = new Date(today);
   defaultFechaFin.setDate(today.getDate() + 25 - today.getDate());
-  const defaultHotelname = 'Hotel de pruebas';
 
   const [roomNumber, setRoomNumber] = useState(defaultRoomNumber);
   const [fechaInicio, setFechaInicio] = useState(today.toISOString().slice(0, 16));
   const [fechaFin, setFechaFin] = useState(defaultFechaFin.toISOString().slice(0, 16));
-  const [hotelname, setHotelname] = useState(defaultHotelname);
+  const [hotelname, setHotelname] = useState('');
   const [cocheID, setCocheID] = useState('');
   const [cars, setCars] = useState([]);
   const [error, setError] = useState(null);
@@ -214,8 +213,15 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
             />
 
             <FormControl fullWidth>
-              <InputLabel sx={selectLabelStyle}>Vehículo</InputLabel>
+              <InputLabel 
+                id="vehicle-label" 
+                sx={selectLabelStyle}
+              >
+                Vehículo
+              </InputLabel>
               <Select
+                labelId="vehicle-label"
+                label="Vehículo"
                 value={cocheID}
                 onChange={(e) => setCocheID(e.target.value)}
                 sx={selectStyle}
@@ -238,8 +244,15 @@ function BookingForm({ onClose, onReservaCreada, booking }) {
             </FormControl>
 
             <FormControl fullWidth>
-              <InputLabel sx={selectLabelStyle}>Hotel</InputLabel>
+              <InputLabel 
+                id="hotel-label" 
+                sx={selectLabelStyle}
+              >
+                Hotel
+              </InputLabel>
               <Select
+                labelId="hotel-label"
+                label="Hotel"
                 value={hotelname}
                 onChange={(e) => setHotelname(e.target.value)}
                 sx={selectStyle}
@@ -352,13 +365,29 @@ const selectStyle = {
   ...textFieldStyle,
   '& .MuiSelect-select': {
     padding: '13px 14px',
+  },
+  '& .MuiInputLabel-root': {
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark'
+        ? 'rgba(26, 32, 53, 0.95)'
+        : 'rgba(255, 255, 255, 0.95)',
+    padding: '0 8px',
   }
 };
 
 // Estilos para las etiquetas de los selects
 const selectLabelStyle = {
-  backgroundColor: 'transparent',
+  backgroundColor: theme =>
+    theme.palette.mode === 'dark'
+      ? 'rgba(26, 32, 53, 0.95)'
+      : 'rgba(255, 255, 255, 0.95)',
   px: 1,
+  '&.Mui-focused': {
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark'
+        ? 'rgba(26, 32, 53, 0.95)'
+        : 'rgba(255, 255, 255, 0.95)',
+  }
 };
 
 // Estilos para el menú desplegable

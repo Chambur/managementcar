@@ -9,6 +9,8 @@ import CarList from './components/CarList';
 import CarForm from './components/CarForm';
 import Navbar from './components/Navbar';
 import BookingList from './components/BookingList';
+import HotelList from './components/HotelList';
+import HotelForm from './components/HotelForm';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -102,6 +104,36 @@ function App() {
             element={
               isAuthenticated ? (
                 <CarForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
+          />
+          <Route 
+            path="/hotels" 
+            element={
+              isAuthenticated ? (
+                <HotelList />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
+          />
+          <Route 
+            path="/hotels/new" 
+            element={
+              isAuthenticated ? (
+                <HotelForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
+          />
+          <Route 
+            path="/hotels/edit/:id" 
+            element={
+              isAuthenticated ? (
+                <HotelForm />
               ) : (
                 <Navigate to="/login" />
               )

@@ -135,6 +135,14 @@ function Navbar({ darkMode, setDarkMode, setIsAuthenticated }) {
             >
               Reservas
             </Button>
+            <Button 
+              onClick={() => navigate('/hotels')} 
+              color="inherit"
+              sx={buttonStyle}
+              className={location.pathname === '/hotels' ? 'active' : ''}
+            >
+              Hoteles
+            </Button>
           </Box>
 
           <Box sx={{ position: 'absolute', right: 16, display: 'flex', alignItems: 'center' }}>
